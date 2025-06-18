@@ -1,2 +1,9 @@
-mkdir -p .github/workflows
-nano .github/workflows/statlog.yml
+name: Statlog Case Study Test
+om: [push]
+
+ jobs:
+    build:
+       run-on: ubantu-latest
+       steps:
+         - name: Checkout
+           uses: actions/checkout@v3
