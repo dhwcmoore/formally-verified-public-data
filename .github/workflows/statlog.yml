@@ -1,9 +1,27 @@
 name: Statlog Case Study Test
-om: [push]
 
- jobs:
-    build:
-       run-on: ubantu-latest
-       steps:
-         - name: Checkout
-           uses: actions/checkout@v3
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install OCaml, OPAM, and Dune
+        run: |
+          sudo apt update
+          sudo apt install -y opam m4 unzip
+          opam init -y --bare
+          opam switch create . ocaml-base-compiler.4.14.1
+          eval $(opam env)
+          opam install -y dune
+
+      - name: Run Tests
+        run: |
+          eval $(opam env)
+          dune build ./statlog/statlog_main.exe
+          ./_build/default/statlog/statlog_main.exe < test/input_001.txt
+
